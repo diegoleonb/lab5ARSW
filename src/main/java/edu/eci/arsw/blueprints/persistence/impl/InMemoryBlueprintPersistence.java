@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 /**
@@ -35,14 +36,18 @@ public class InMemoryBlueprintPersistence implements BlueprintsPersistence{
         Blueprint bp=new Blueprint("_authorname_", "_bpname_ ",pts);
         blueprints.put(new Tuple<>(bp.getAuthor(),bp.getName()), bp);
         for(int i=0;i<2;i++){
-            bp = new Blueprint("diego",("plano"+(i+1)));
+            int p1 = (int) (Math.random()*100);
+            int p2 = (int) (Math.random()*100);
+            Point[] pt=new Point[]{new Point(p1, p1),new Point(p2, p2)};
+            bp = new Blueprint("diego",("plano"+(i+1)),pt);
             blueprints.put(new Tuple<>(bp.getAuthor(),bp.getName()), bp);
         }
-        bp = new Blueprint("norbey",("plano3"));
+        bp = new Blueprint("norbey","plano3",pts);
         blueprints.put(new Tuple<>(bp.getAuthor(),bp.getName()), bp);        
     } 
         
     
+
     @Override
     public void saveBlueprint(Blueprint bp) throws BlueprintPersistenceException {
         if (this.blueprints.containsKey(new Tuple<>(bp.getAuthor(),bp.getName()))){
