@@ -2,6 +2,7 @@
 
 ### Arquitecturas de Software
 
+### Diego Leon y Norbey Cardona
 
 
 #### API REST para la gestión de planos.
