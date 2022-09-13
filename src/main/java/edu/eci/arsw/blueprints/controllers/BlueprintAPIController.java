@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -68,6 +69,18 @@ public class BlueprintAPIController {
             return new ResponseEntity<>("Error"+ex.getMessage(),HttpStatus.NOT_FOUND);
         } 
     }
+
+    @RequestMapping(value = "/blueprints/addBlueprint",method = RequestMethod.POST)
+    public ResponseEntity<?> controllerNewBluePrint(@RequestBody Blueprint bp){
+        try {
+            service.addNewBlueprint(bp);
+            return new ResponseEntity<>("Se ha agregado Correctamente",HttpStatus.CREATED);
+        } catch (Exception e) {
+            Logger.getLogger(BlueprintAPIController.class.getName()).log(Level.SEVERE, null, e);
+            return new ResponseEntity<>("Error"+e.getMessage(),HttpStatus.NOT_ACCEPTABLE);
+        }
+    }
+
 
 }
 
