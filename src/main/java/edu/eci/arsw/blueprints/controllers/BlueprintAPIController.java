@@ -5,7 +5,6 @@
  */
 package edu.eci.arsw.blueprints.controllers;
 
-import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -13,13 +12,12 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.eci.arsw.blueprints.model.Blueprint;
-import edu.eci.arsw.blueprints.persistence.BlueprintsPersistence;
-import edu.eci.arsw.blueprints.persistence.impl.InMemoryBlueprintPersistence;
 import edu.eci.arsw.blueprints.services.BlueprintsServices;
 
 /**
@@ -37,11 +35,39 @@ public class BlueprintAPIController {
         Set<Blueprint> blueprints = null;
         try {
             blueprints = service.getAllBlueprints();
+            service.applyFilter(blueprints);
             return new ResponseEntity<>(blueprints,HttpStatus.ACCEPTED);
         } catch (Exception ex) {
             Logger.getLogger(BlueprintAPIController.class.getName()).log(Level.SEVERE, null, ex);
             return new ResponseEntity<>("Error"+ex.getMessage(),HttpStatus.NOT_FOUND);
         }    
     }
+
+    @RequestMapping(value = "/blueprints/{author}", method = RequestMethod.GET)
+    public ResponseEntity<?> controllerGetBluePrintsByAuthor(@PathVariable String author){
+        Set<Blueprint> blueprints = null;
+        try {
+            blueprints = service.getBlueprintsByAuthor(author);
+            service.applyFilterByAuthor(blueprints, author);
+            return new ResponseEntity<>(blueprints,HttpStatus.ACCEPTED);
+        } catch (Exception ex) {
+            Logger.getLogger(BlueprintAPIController.class.getName()).log(Level.SEVERE, null, ex);
+            return new ResponseEntity<>("Error"+ex.getMessage(),HttpStatus.NOT_FOUND);
+        } 
+    }
+
+    @RequestMapping(value = "/blueprints/{author}/{bpname}", method = RequestMethod.GET)
+    public ResponseEntity<?> controllerGetBluePrintsByName(@PathVariable String author, @PathVariable String bpname){
+        Blueprint blueprint = null;
+        try {
+            blueprint = service.getBlueprint(author, bpname);
+            service.applyFilter(blueprint);
+            return new ResponseEntity<>(blueprint,HttpStatus.ACCEPTED);
+        } catch (Exception ex) {
+            Logger.getLogger(BlueprintAPIController.class.getName()).log(Level.SEVERE, null, ex);
+            return new ResponseEntity<>("Error"+ex.getMessage(),HttpStatus.NOT_FOUND);
+        } 
+    }
+
 }
 

@@ -5,15 +5,12 @@
  */
 package edu.eci.arsw.blueprints.services;
 
+import edu.eci.arsw.blueprints.filter.types.FilterType;
 import edu.eci.arsw.blueprints.model.Blueprint;
-import edu.eci.arsw.blueprints.model.Point;
 import edu.eci.arsw.blueprints.persistence.BlueprintNotFoundException;
 import edu.eci.arsw.blueprints.persistence.BlueprintPersistenceException;
 import edu.eci.arsw.blueprints.persistence.BlueprintsPersistence;
 
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -29,6 +26,10 @@ public class BlueprintsServices {
     @Autowired
     @Qualifier("Memory")
     BlueprintsPersistence bpp;
+
+    @Autowired
+    @Qualifier("Sub")
+    FilterType filter;
     
     /**
      * Add new Blueprint in the class InMemoryBluePrintPersistence
@@ -67,6 +68,18 @@ public class BlueprintsServices {
      */
     public Set<Blueprint> getBlueprintsByAuthor(String author) throws BlueprintNotFoundException, BlueprintPersistenceException{
         return bpp.getBlueprintsByAuthor(author);
+    }
+
+    public void applyFilter(Blueprint bp) throws BlueprintNotFoundException{
+        filter.filterBlueprint(bp);
+    }
+
+    public void applyFilter(Set<Blueprint> bps) throws BlueprintNotFoundException, BlueprintPersistenceException{
+        filter.filterBlueprints(bps);
+    }
+
+    public void applyFilterByAuthor(Set<Blueprint> blueprints, String author) throws BlueprintNotFoundException{
+        filter.filterPrintsByAuthor(author, blueprints);
     }
     
 }
