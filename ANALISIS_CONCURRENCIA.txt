@@ -1,0 +1,19 @@
+- Qué condiciones de carrera se podrían presentar?
+
+Las condiciones de carrera que se podrían presentar son las de consulta al mismo tiempo que actualizacion o de creacion. Es decir, la consulta se vera afectada si milisegundos 
+antes se realizo un put o un create por lo que los resultados no seran los que se tienen correctamente sino los que se tenian antes de la ejecucion.
+Por lo que, las consultas se verian afectadas al igual que las actualizaciones en caso de que se le agregue la opcion de actualizar el autor o el nombre del plano. Porque
+si se actualiza el autor milisegundos antes entonces no se encontraria el plano deseado porque ya ha sido modificado su nombre de autor o del plano en si.
+
+- Cuales son las respectivas regiones críticas?
+
+Las respectivas regiones críticas son aquellas que su funcionalidad se ve limitada mediante peticiones HTTP las cuales son: GET, POST, PUT, DELETE(no aplica). Debido a 
+que todas las peticiones son respecto al mismo arrayList de BluePrints por lo que si no hay un respectivo control se genera una condicion de carrera o en su defecto un deadLocks.
+
+
+Solucion:
+
+En la clase InMemoryBlueprintPersistence se tiene el Map<Tuple<String,String>,Blueprint> blueprints por lo que en esta clase se implementa un THREAD-SAFE con el fin de que el Map
+sea sincronizado (uso de synchronized) y que no pueda ser usado al mismo tiempo por mas de un hilo. Asi, evitamos que al tiempo que se este consultando se este haciendo
+una actualizacion o una creacion de un Blueprint para no afectar la misma y solucionar la condicion de carrera. Por otro lado, se mofifica el Map por ConcurrentHashMap para que
+sea segura cuando se realicen varios subprocesos haciendo que nuestra API funcione en un entorno concurrente.
