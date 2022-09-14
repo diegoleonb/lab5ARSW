@@ -31,16 +31,16 @@ public class InMemoryBlueprintPersistence implements BlueprintsPersistence{
     public InMemoryBlueprintPersistence() {
         //load stub data
         Point[] pts=new Point[]{new Point(140, 140),new Point(115, 115)};
-        Blueprint bp=new Blueprint("_authorname_",pts, "_bpname_ ");
+        Blueprint bp=new Blueprint("_authorname_", "_bpname_ ",pts);
         blueprints.put(new Tuple<>(bp.getAuthor(),bp.getName()), bp);
         for(int i=0;i<2;i++){
             int p1 = (int) (Math.random()*100);
             int p2 = (int) (Math.random()*100);
             Point[] pt=new Point[]{new Point(p1, p1),new Point(p2, p2)};
-            bp = new Blueprint("diego",pt,("plano"+(i+1)));
+            bp = new Blueprint("diego",("plano"+(i+1)),pt);
             blueprints.put(new Tuple<>(bp.getAuthor(),bp.getName()), bp);
         }
-        bp = new Blueprint("norbey",pts,"plano3");
+        bp = new Blueprint("norbey","plano3",pts);
         blueprints.put(new Tuple<>(bp.getAuthor(),bp.getName()), bp);        
     } 
         

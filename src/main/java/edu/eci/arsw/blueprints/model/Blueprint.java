@@ -21,7 +21,7 @@ public class Blueprint {
      * @param name
      * @param pnts
      */
-    public Blueprint(String author,Point[] pnts, String name){
+    public Blueprint(String author,String name,Point[] pnts){
         this.author=author;
         this.name=name;
         points=Arrays.asList(pnts);

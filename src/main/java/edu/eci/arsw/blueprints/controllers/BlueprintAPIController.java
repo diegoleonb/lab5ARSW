@@ -5,6 +5,7 @@
  */
 package edu.eci.arsw.blueprints.controllers;
 
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -81,6 +83,16 @@ public class BlueprintAPIController {
         }
     }
 
+    @PutMapping(value = "/blueprints/{author}/{bpname}")
+    public ResponseEntity<?> controllerPutBluePrint(@PathVariable("author") String author, @PathVariable("bpname") String bpname, @RequestBody Blueprint bp){
+        try {
+            service.updateBlueprint(author, bpname, bp.getPoints());
+            return new ResponseEntity<>(service.getBlueprint(author, bpname),HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            Logger.getLogger(BlueprintAPIController.class.getName()).log(Level.SEVERE, null, e);
+            return new ResponseEntity<>("Error"+e.getMessage(),HttpStatus.NOT_ACCEPTABLE);
+        }
+    }
 
 }
 
